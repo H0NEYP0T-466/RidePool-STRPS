@@ -1,19 +1,17 @@
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime
 from bson import ObjectId
 from app.utils.database import get_database
 from app.utils.jwt_handler import create_access_token
 from app.models.user import UserCreate, UserLogin
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
 def register_user(user_data: UserCreate) -> dict:

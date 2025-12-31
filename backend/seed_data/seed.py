@@ -9,10 +9,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from datetime import datetime, timedelta
 import random
-from passlib.context import CryptContext
+import bcrypt
 from pymongo import MongoClient
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 # MongoDB connection
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/strps")
@@ -61,7 +63,7 @@ def create_users():
             "name": PAKISTANI_NAMES[i],
             "email": f"user{i+1}@ridepool.pk",
             "phone": f"+9230{random.randint(10000000, 99999999)}",
-            "password": pwd_context.hash("password123"),
+            "password": hash_password("password123"),
             "role": "user",
             "profileImage": None,
             "createdAt": now - timedelta(days=random.randint(1, 30)),
@@ -75,7 +77,7 @@ def create_users():
             "name": PAKISTANI_NAMES[10 + i],
             "email": f"driver{i+1}@ridepool.pk",
             "phone": f"+9231{random.randint(10000000, 99999999)}",
-            "password": pwd_context.hash("password123"),
+            "password": hash_password("password123"),
             "role": "driver",
             "profileImage": None,
             "createdAt": now - timedelta(days=random.randint(1, 30)),
@@ -89,7 +91,7 @@ def create_users():
             "name": PAKISTANI_NAMES[15 + i],
             "email": f"admin{i+1}@ridepool.pk",
             "phone": f"+9232{random.randint(10000000, 99999999)}",
-            "password": pwd_context.hash("password123"),
+            "password": hash_password("password123"),
             "role": "admin",
             "profileImage": None,
             "createdAt": now - timedelta(days=random.randint(1, 30)),
