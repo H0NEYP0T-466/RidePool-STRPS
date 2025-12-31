@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRide } from '../../../context/RideContext';
+import api from '../../../services/api';
 import Button from '../../common/Button/Button';
 import LocationSearch from '../../common/LocationSearch/LocationSearch';
 import { formatCurrency } from '../../../utils/helpers';
@@ -9,7 +11,18 @@ import { DEFAULT_CENTER, PAKISTAN_CITIES } from '../../../utils/constants';
 import type { LocationWithAddress, NearbyDriver } from '../../../types';
 import './RideBooking.css';
 
+interface PoolInfo {
+  id: string;
+  type: string;
+  pickupLocation: { lat: number; lng: number; address?: string };
+  dropoffLocation: { lat: number; lng: number; address?: string };
+  currentPassengers: number;
+}
+
 const RideBooking = () => {
+  const [searchParams] = useSearchParams();
+  const joinPoolId = searchParams.get('joinPool');
+  
   const {
     pickupLocation,
     dropoffLocation,
@@ -29,6 +42,30 @@ const RideBooking = () => {
   const [selectingLocation, setSelectingLocation] = useState<'pickup' | 'dropoff' | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [joiningPool, setJoiningPool] = useState(false);
+  const [poolInfo, setPoolInfo] = useState<PoolInfo | null>(null);
+
+  // Fetch pool info if joining a pool
+  useEffect(() => {
+    if (joinPoolId) {
+      setJoiningPool(true);
+      // Fetch pool details
+      const fetchPoolInfo = async () => {
+        try {
+          const response = await api.get('/api/rides/available-pools');
+          const pools = response.data.data.pools || [];
+          const pool = pools.find((p: PoolInfo) => p.id === joinPoolId);
+          if (pool) {
+            setPoolInfo(pool);
+            setWantPooling(true);
+          }
+        } catch (error) {
+          console.error('Failed to fetch pool info:', error);
+        }
+      };
+      fetchPoolInfo();
+    }
+  }, [joinPoolId, setWantPooling]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -151,8 +188,23 @@ const RideBooking = () => {
     }
 
     try {
-      await requestRide();
-      setSuccess('Ride requested successfully! Looking for drivers...');
+      // If joining a pool, use the join-pool endpoint
+      if (joiningPool && joinPoolId) {
+        await api.post(`/api/rides/join-pool/${joinPoolId}`, null, {
+          params: {
+            pickup_lat: pickupLocation.lat,
+            pickup_lng: pickupLocation.lng,
+            dropoff_lat: dropoffLocation.lat,
+            dropoff_lng: dropoffLocation.lng,
+            pickup_address: pickupLocation.address || '',
+            dropoff_address: dropoffLocation.address || '',
+          }
+        });
+        setSuccess('Successfully joined the pool! You will be notified when a driver accepts.');
+      } else {
+        await requestRide();
+        setSuccess('Ride requested successfully! Looking for drivers...');
+      }
     } catch {
       setError('Failed to request ride. Please try again.');
     }
@@ -161,9 +213,22 @@ const RideBooking = () => {
   return (
     <div className="ride-booking">
       <div className="booking-header">
-        <h1>Book a Ride</h1>
-        <p>Search for locations or select on the map</p>
+        <h1>{joiningPool ? 'Join a Pool' : 'Book a Ride'}</h1>
+        <p>{joiningPool ? 'Select your pickup and dropoff to join this pool' : 'Search for locations or select on the map'}</p>
       </div>
+
+      {joiningPool && poolInfo && (
+        <div className="pool-info-banner">
+          <h3>🚙 Joining Pool</h3>
+          <p>
+            <strong>From:</strong> {poolInfo.pickupLocation.address || `${poolInfo.pickupLocation.lat.toFixed(4)}, ${poolInfo.pickupLocation.lng.toFixed(4)}`}
+          </p>
+          <p>
+            <strong>To:</strong> {poolInfo.dropoffLocation.address || `${poolInfo.dropoffLocation.lat.toFixed(4)}, ${poolInfo.dropoffLocation.lng.toFixed(4)}`}
+          </p>
+          <p><strong>Current passengers:</strong> {poolInfo.currentPassengers}/4</p>
+        </div>
+      )}
 
       <div className="booking-content">
         <div className="booking-form-container">
@@ -255,7 +320,7 @@ const RideBooking = () => {
             onClick={handleBookRide}
             disabled={!pickupLocation || !dropoffLocation}
           >
-            Request Ride
+            {joiningPool ? 'Join Pool' : 'Request Ride'}
           </Button>
         </div>
 

@@ -271,3 +271,31 @@
   margin-top: 0.5rem;
   text-align: center;
 }
+
+/* Pool Info Banner */
+.pool-info-banner {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(16, 185, 129, 0.1));
+  border: 1px solid #00d4ff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pool-info-banner h3 {
+  color: #00d4ff;
+  margin-bottom: 0.75rem;
+}
+
+.pool-info-banner p {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.pool-info-banner p:last-child {
+  margin-bottom: 0;
+}
+
+.pool-info-banner strong {
+  color: #fff;
+}

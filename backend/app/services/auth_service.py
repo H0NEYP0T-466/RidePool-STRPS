@@ -36,6 +36,22 @@ def register_user(user_data: UserCreate) -> dict:
     result = db.users.insert_one(user_doc)
     user_doc["_id"] = result.inserted_id
     
+    # If registering as a driver, create a driver profile
+    if user_data.role == "driver":
+        driver_doc = {
+            "userId": str(user_doc["_id"]),
+            "vehicleType": "Sedan",  # Default, user should update
+            "vehicleNumber": "PENDING",
+            "licenseNumber": "PENDING",
+            "currentLocation": None,
+            "isAvailable": False,  # Not available until profile is completed
+            "rating": 0.0,
+            "totalTrips": 0,
+            "createdAt": now,
+            "updatedAt": now
+        }
+        db.drivers.insert_one(driver_doc)
+    
     token = create_access_token({
         "sub": str(user_doc["_id"]),
         "email": user_doc["email"],

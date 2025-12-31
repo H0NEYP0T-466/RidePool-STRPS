@@ -151,6 +151,85 @@
   color: #a0a0a0;
 }
 
+/* Available Pools Styles */
+.pools-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pool-card {
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #2d3748;
+}
+
+.pool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pool-type {
+  color: #00d4ff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pool-passengers {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  background: rgba(0, 212, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.pool-locations {
+  margin-bottom: 0.75rem;
+}
+
+.pool-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.pool-location:last-child {
+  margin-bottom: 0;
+}
+
+.location-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.location-dot.pickup {
+  background: #10b981;
+}
+
+.location-dot.dropoff {
+  background: #ef4444;
+}
+
+.pool-distance {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.pool-driver,
+.pool-user {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
 @media (max-width: 768px) {
   .dashboard-content {
     grid-template-columns: 1fr;

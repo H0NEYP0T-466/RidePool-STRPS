@@ -15,13 +15,34 @@ def get_driver_user(current_user: dict = Depends(get_current_user)):
     return current_user
 
 
+def get_or_create_driver_profile(user_id: str, db):
+    """Get driver profile or create one if it doesn't exist"""
+    driver = db.drivers.find_one({"userId": user_id})
+    
+    if not driver:
+        now = datetime.utcnow()
+        driver_doc = {
+            "userId": user_id,
+            "vehicleType": "Sedan",
+            "vehicleNumber": "PENDING",
+            "licenseNumber": "PENDING",
+            "currentLocation": None,
+            "isAvailable": False,
+            "rating": 0.0,
+            "totalTrips": 0,
+            "createdAt": now,
+            "updatedAt": now
+        }
+        result = db.drivers.insert_one(driver_doc)
+        driver = db.drivers.find_one({"_id": result.inserted_id})
+    
+    return driver
+
+
 @router.get("/profile")
 async def get_driver_profile(current_user: dict = Depends(get_driver_user)):
     db = get_database()
-    driver = db.drivers.find_one({"userId": current_user["id"]})
-    
-    if not driver:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
+    driver = get_or_create_driver_profile(current_user["id"], db)
     
     driver["id"] = str(driver.pop("_id"))
     if driver.get("createdAt"):
@@ -38,6 +59,55 @@ async def get_driver_profile(current_user: dict = Depends(get_driver_user)):
     }
 
 
+@router.put("/profile")
+async def update_driver_profile(
+    update_data: DriverUpdate,
+    current_user: dict = Depends(get_driver_user)
+):
+    db = get_database()
+    
+    # Get or create driver profile
+    driver = get_or_create_driver_profile(current_user["id"], db)
+    
+    # Build update document
+    update_doc = {}
+    if update_data.vehicleType is not None:
+        update_doc["vehicleType"] = update_data.vehicleType
+    if update_data.vehicleNumber is not None:
+        update_doc["vehicleNumber"] = update_data.vehicleNumber
+    if update_data.licenseNumber is not None:
+        update_doc["licenseNumber"] = update_data.licenseNumber
+    if update_data.isAvailable is not None:
+        update_doc["isAvailable"] = update_data.isAvailable
+    
+    if not update_doc:
+        return {
+            "success": True,
+            "message": "No changes to update",
+            "data": {"driver": driver}
+        }
+    
+    update_doc["updatedAt"] = datetime.utcnow()
+    
+    result = db.drivers.find_one_and_update(
+        {"_id": driver["_id"]},
+        {"$set": update_doc},
+        return_document=True
+    )
+    
+    result["id"] = str(result.pop("_id"))
+    if result.get("createdAt"):
+        result["createdAt"] = result["createdAt"].isoformat()
+    if result.get("updatedAt"):
+        result["updatedAt"] = result["updatedAt"].isoformat()
+    
+    return {
+        "success": True,
+        "message": "Profile updated successfully",
+        "data": {"driver": result}
+    }
+
+
 @router.put("/location")
 async def update_location(
     location: DriverLocationUpdate,
@@ -45,8 +115,11 @@ async def update_location(
 ):
     db = get_database()
     
+    # Ensure driver profile exists
+    driver = get_or_create_driver_profile(current_user["id"], db)
+    
     result = db.drivers.find_one_and_update(
-        {"userId": current_user["id"]},
+        {"_id": driver["_id"]},
         {
             "$set": {
                 "currentLocation": {"lat": location.lat, "lng": location.lng},
@@ -55,9 +128,6 @@ async def update_location(
         },
         return_document=True
     )
-    
-    if not result:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
     
     return {
         "success": True,
@@ -77,10 +147,8 @@ async def get_pending_ride_requests(
 ):
     db = get_database()
     
-    # Get driver's current location for proximity sorting
-    driver = db.drivers.find_one({"userId": current_user["id"]})
-    if not driver:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
+    # Get or create driver profile
+    driver = get_or_create_driver_profile(current_user["id"], db)
     
     skip = (page - 1) * limit
     
@@ -127,10 +195,8 @@ async def accept_ride(
 ):
     db = get_database()
     
-    # Get driver
-    driver = db.drivers.find_one({"userId": current_user["id"]})
-    if not driver:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
+    # Get or create driver
+    driver = get_or_create_driver_profile(current_user["id"], db)
     
     # Get booking
     try:
@@ -223,9 +289,7 @@ async def update_ride_status(
 ):
     db = get_database()
     
-    driver = db.drivers.find_one({"userId": current_user["id"]})
-    if not driver:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
+    driver = get_or_create_driver_profile(current_user["id"], db)
     
     try:
         ride = db.rides.find_one({
@@ -287,9 +351,7 @@ async def get_driver_rides(
 ):
     db = get_database()
     
-    driver = db.drivers.find_one({"userId": current_user["id"]})
-    if not driver:
-        raise HTTPException(status_code=404, detail="Driver profile not found")
+    driver = get_or_create_driver_profile(current_user["id"], db)
     
     query = {"driverId": str(driver["_id"])}
     if status:

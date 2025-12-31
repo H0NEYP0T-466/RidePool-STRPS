@@ -70,11 +70,13 @@ const DriverDashboard = () => {
   const handleToggleAvailability = async () => {
     if (!profile) return;
 
+    const newAvailability = !profile.driver.isAvailable;
+    
     try {
-      // This would normally update availability via API
+      await api.put('/api/driver/profile', { isAvailable: newAvailability });
       setProfile({
         ...profile,
-        driver: { ...profile.driver, isAvailable: !profile.driver.isAvailable },
+        driver: { ...profile.driver, isAvailable: newAvailability },
       });
     } catch (error) {
       console.error('Failed to update availability:', error);
