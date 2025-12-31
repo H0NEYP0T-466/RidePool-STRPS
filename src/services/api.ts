@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
+import type { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { API_URL } from '../utils/constants';
 import { getToken, clearAuth } from '../utils/helpers';
 

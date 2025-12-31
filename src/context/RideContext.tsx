@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { Booking, LocationWithAddress, FareInfo, NearbyDriver, PoolMatch } from '../types';
 import api from '../services/api';
 
@@ -144,6 +145,7 @@ export const RideProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useRide = (): RideContextType => {
   const context = useContext(RideContext);
   if (context === undefined) {

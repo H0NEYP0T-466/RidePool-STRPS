@@ -152,7 +152,7 @@ const RideBooking = () => {
     try {
       await requestRide();
       setSuccess('Ride requested successfully! Looking for drivers...');
-    } catch (err) {
+    } catch {
       setError('Failed to request ride. Please try again.');
     }
   };
