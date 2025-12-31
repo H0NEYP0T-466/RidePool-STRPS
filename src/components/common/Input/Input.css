@@ -1,0 +1,83 @@
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #2d3748;
+  border-radius: 8px;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.input-field::placeholder {
+  color: #a0a0a0;
+}
+
+.input-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-error .input-field {
+  border-color: #ef4444;
+}
+
+.input-error .input-field:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-error-message {
+  display: block;
+  margin-top: 0.25rem;
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+.input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0a0a0;
+}
+
+.input-field.has-icon {
+  padding-right: 2.5rem;
+}
+
+/* Textarea */
+.input-field.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Select */
+.input-field.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a0a0a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}

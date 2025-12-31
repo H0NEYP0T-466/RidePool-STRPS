@@ -1,0 +1,266 @@
+.ride-booking {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.booking-header {
+  margin-bottom: 1.5rem;
+}
+
+.booking-header h1 {
+  color: #fff;
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.booking-header p {
+  color: #a0a0a0;
+}
+
+.booking-content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 2rem;
+  min-height: 500px;
+}
+
+.booking-form-container {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+.booking-form-container h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.location-inputs {
+  margin-bottom: 1.5rem;
+}
+
+.location-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.location-input:hover {
+  border-color: #2d3748;
+}
+
+.location-input.active {
+  border-color: #00d4ff;
+}
+
+.location-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.location-marker.pickup {
+  background: #10b981;
+}
+
+.location-marker.dropoff {
+  background: #ef4444;
+}
+
+.location-details {
+  flex: 1;
+}
+
+.location-label {
+  display: block;
+  color: #a0a0a0;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.location-address {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.pooling-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.pooling-info h4 {
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.pooling-info p {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+}
+
+.toggle-switch {
+  width: 50px;
+  height: 26px;
+  background: #2d3748;
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #00d4ff;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(24px);
+}
+
+.fare-estimate {
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.fare-estimate h4 {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.fare-amount {
+  color: #00d4ff;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.fare-breakdown {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #2d3748;
+}
+
+.fare-line {
+  display: flex;
+  justify-content: space-between;
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.fare-line.discount {
+  color: #10b981;
+}
+
+.map-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 500px;
+  color: #a0a0a0;
+}
+
+.leaflet-container {
+  height: 100%;
+  min-height: 500px;
+  width: 100%;
+}
+
+.nearby-drivers {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.nearby-drivers h3 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.drivers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.driver-card {
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.driver-avatar {
+  width: 50px;
+  height: 50px;
+  background: #00d4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.driver-details h4 {
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.driver-details p {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+}
+
+.driver-rating {
+  color: #f59e0b;
+}
+
+@media (max-width: 900px) {
+  .booking-content {
+    grid-template-columns: 1fr;
+  }
+
+  .map-container {
+    min-height: 400px;
+  }
+}

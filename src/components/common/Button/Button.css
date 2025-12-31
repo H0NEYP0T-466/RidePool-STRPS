@@ -1,0 +1,114 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.btn-primary {
+  background: #00d4ff;
+  color: #1a1a2e;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #00b8e6;
+}
+
+.btn-secondary {
+  background: #2d3748;
+  color: #fff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #4a5568;
+}
+
+.btn-success {
+  background: #10b981;
+  color: #fff;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #059669;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-warning {
+  background: #f59e0b;
+  color: #1a1a2e;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: #d97706;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #00d4ff;
+  color: #00d4ff;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.1);
+}
+
+/* Sizes */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Full width */
+.btn-block {
+  width: 100%;
+}
+
+/* Loading */
+.btn-loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
