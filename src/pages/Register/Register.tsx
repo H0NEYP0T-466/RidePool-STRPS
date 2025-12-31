@@ -48,7 +48,14 @@ const Register = () => {
         password: formData.password,
         role: formData.role,
       });
-      navigate('/user/dashboard');
+      // Redirect based on role
+      if (formData.role === 'driver') {
+        navigate('/driver/dashboard');
+      } else if (formData.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/user/dashboard');
+      }
     } catch (err: unknown) {
       const error = err as { response?: { data?: { detail?: string } } };
       setError(error.response?.data?.detail || 'Registration failed');

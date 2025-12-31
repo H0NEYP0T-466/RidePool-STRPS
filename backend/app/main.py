@@ -63,7 +63,7 @@ async def root():
 socket_app = socketio.ASGIApp(
     sio, 
     other_asgi_app=app,
-    socketio_path='socket.io'
+    socketio_path='/socket.io'
 )
 
 
