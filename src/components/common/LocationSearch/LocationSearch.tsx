@@ -72,15 +72,18 @@ const LOCATIONS = [
   { name: 'Hyderabad - Auto Bhan Road', city: 'Hyderabad', lat: 25.3999, lng: 68.3601 },
 ];
 
-// Add the main city centers as well
+// Add the main city centers as well (using Set for O(1) lookup)
+const existingNames = new Set(LOCATIONS.map(l => l.name));
 Object.entries(PAKISTAN_CITIES).forEach(([name, coords]) => {
-  if (!LOCATIONS.find(l => l.name === name)) {
+  const cityName = `${name} - City Center`;
+  if (!existingNames.has(name) && !existingNames.has(cityName)) {
     LOCATIONS.push({
-      name: `${name} - City Center`,
+      name: cityName,
       city: name,
       lat: coords.lat,
       lng: coords.lng,
     });
+    existingNames.add(cityName);
   }
 });
 
@@ -229,7 +232,7 @@ const LocationSearch = ({
           {filteredLocations.length > 0 ? (
             filteredLocations.map((location, index) => (
               <div
-                key={`${location.name}-${index}`}
+                key={location.name}
                 className={`location-search-option ${
                   highlightedIndex === index ? 'highlighted' : ''
                 } ${value?.address === location.name ? 'selected' : ''}`}
