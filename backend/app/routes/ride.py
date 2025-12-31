@@ -183,9 +183,15 @@ async def join_pool(
         True  # pooling discount
     )
     
+    # Validate pool_id is a valid ObjectId
+    try:
+        pool_object_id = ObjectId(pool_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid pool ID format")
+    
     try:
         # Try to find as ride first
-        ride = db.rides.find_one({"_id": ObjectId(pool_id)})
+        ride = db.rides.find_one({"_id": pool_object_id})
         
         if ride:
             # Check if ride is still open for pooling
@@ -259,7 +265,7 @@ async def join_pool(
             }
         else:
             # Try to find as a booking (user wants to pool with another user's booking)
-            existing_booking = db.bookings.find_one({"_id": ObjectId(pool_id)})
+            existing_booking = db.bookings.find_one({"_id": pool_object_id})
             
             if not existing_booking:
                 raise HTTPException(status_code=404, detail="Pool not found")
@@ -358,10 +364,12 @@ async def join_pool(
                 }
             }
             
+    except HTTPException:
+        raise
     except Exception as e:
-        if isinstance(e, HTTPException):
-            raise e
-        raise HTTPException(status_code=400, detail=f"Failed to join pool: {str(e)}")
+        # Log the actual error for debugging but return a generic message
+        print(f"Error joining pool: {str(e)}")
+        raise HTTPException(status_code=400, detail="Failed to join pool. Please try again.")
 
 
 @router.post("/match")

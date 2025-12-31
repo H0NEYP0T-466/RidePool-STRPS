@@ -161,7 +161,7 @@ const UserDashboard = () => {
                       <span>{pool.dropoffLocation.address || `${pool.dropoffLocation.lat.toFixed(4)}, ${pool.dropoffLocation.lng.toFixed(4)}`}</span>
                     </div>
                   </div>
-                  {pool.distance !== null && pool.distance !== undefined && (
+                  {pool.distance != null && (
                     <div className="pool-distance">{pool.distance} km from you</div>
                   )}
                   {pool.driver && (
