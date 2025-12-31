@@ -20,6 +20,8 @@ interface PoolInfo {
   maxPassengers?: number;
 }
 
+const NAVIGATION_DELAY_MS = 2000;
+
 const RideBooking = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -219,8 +221,8 @@ const RideBooking = () => {
           }
         });
         setSuccess('Successfully joined the pool! You will be notified when a driver accepts.');
-        // Navigate to dashboard after 2 seconds
-        setTimeout(() => navigate('/user/dashboard'), 2000);
+        // Navigate to dashboard after a short delay
+        setTimeout(() => navigate('/user/dashboard'), NAVIGATION_DELAY_MS);
       } else {
         await requestRide();
         setSuccess('Ride requested successfully! Looking for drivers...');

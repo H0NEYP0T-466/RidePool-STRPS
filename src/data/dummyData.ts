@@ -519,28 +519,31 @@ export const DUMMY_NEARBY_DRIVERS: NearbyDriver[] = [
   },
 ];
 
+// Constants for fare calculation
+const EARTH_RADIUS_KM = 6371;
+const BASE_FARE_PKR = 100;
+const PER_KM_RATE_PKR = 35;
+const POOL_DISCOUNT_PERCENT = 0.25;
+
 // Fare calculation helper
 export const calculateDummyFare = (pickupLat: number, pickupLng: number, dropoffLat: number, dropoffLng: number, wantPooling: boolean): FareInfo => {
   // Calculate distance using Haversine formula
-  const R = 6371; // Earth's radius in kilometers
   const dLat = (dropoffLat - pickupLat) * Math.PI / 180;
   const dLng = (dropoffLng - pickupLng) * Math.PI / 180;
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(pickupLat * Math.PI / 180) * Math.cos(dropoffLat * Math.PI / 180) *
             Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = Math.round(R * c * 10) / 10;
+  const distance = Math.round(EARTH_RADIUS_KM * c * 10) / 10;
 
-  const baseFare = 100;
-  const perKmRate = 35;
-  const distanceFare = distance * perKmRate;
-  const subtotal = baseFare + distanceFare;
-  const discount = wantPooling ? Math.round(subtotal * 0.25) : 0;
+  const distanceFare = distance * PER_KM_RATE_PKR;
+  const subtotal = BASE_FARE_PKR + distanceFare;
+  const discount = wantPooling ? Math.round(subtotal * POOL_DISCOUNT_PERCENT) : 0;
   const totalFare = subtotal - discount;
 
   return {
     distance,
-    baseFare,
+    baseFare: BASE_FARE_PKR,
     distanceFare: Math.round(distanceFare),
     discount,
     totalFare: Math.round(totalFare),
