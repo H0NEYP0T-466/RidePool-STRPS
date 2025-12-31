@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { RideProvider } from './context/RideContext';
 import Navbar from './components/common/Navbar/Navbar';
 import Footer from './components/common/Footer/Footer';
+import BackendStatusBanner from './components/common/BackendStatusBanner/BackendStatusBanner';
 
 // Pages
 import Landing from './pages/Landing/Landing';
@@ -245,6 +246,7 @@ function App() {
               <AppRoutes />
             </main>
             <Footer />
+            <BackendStatusBanner />
           </div>
         </RideProvider>
       </AuthProvider>

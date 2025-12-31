@@ -143,7 +143,12 @@ const DriverDashboard = () => {
               {pendingRequests.map((request) => (
                 <div key={request.bookingId} className="request-card">
                   <div className="request-header">
-                    <h4>{request.userName}</h4>
+                    <div className="request-user-info">
+                      <h4>{request.userName}</h4>
+                      {request.wantPooling && (
+                        <span className="pooling-indicator">👥 Pool</span>
+                      )}
+                    </div>
                     <span className="request-fare">{formatCurrency(request.fare)}</span>
                   </div>
                   <div className="request-location">
