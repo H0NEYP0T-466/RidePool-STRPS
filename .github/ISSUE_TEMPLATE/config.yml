@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions / Discussions
+    url: https://github.com/H0NEYP0T-466/RidePool-STRPS/discussions
+    about: Ask questions or start a discussion.
+  - name: Security Reports
+    url: https://github.com/H0NEYP0T-466/RidePool-STRPS/blob/main/SECURITY.md
+    about: Please review the security policy for responsible disclosure steps.
+  - name: Q&A
+    url: https://github.com/H0NEYP0T-466/RidePool-STRPS/issues
+    about: For general questions not covered above.
