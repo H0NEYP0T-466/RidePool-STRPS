@@ -21,7 +21,7 @@
   ![Languages Count](https://img.shields.io/github/languages/count/H0NEYP0T-466/RidePool-STRPS?style=for-the-badge&color=success)  
 
   <!-- Optional CI/Security -->
-  ![Build Status](https://img.shields.io/github/actions/workflow/status/H0NEYP0T-466/RidePool-STRPS/ci.yml?style=for-the-badge&logo=github)  
+  ![Build Status](https://img.shields.io/badge/CI-Not%20Configured-lightgrey?style=for-the-badge&logo=github)  
   ![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/H0NEYP0T-466/RidePool-STRPS?style=for-the-badge&color=red)  
 
   <!-- Community -->
@@ -135,7 +135,7 @@ Participation in this project is governed by the [CODE_OF_CONDUCT.md](./CODE_OF_
 **Frameworks & Libraries**
 
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.2.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8.0-010101?style=for-the-badge&logo=socket.io&logoColor=white)
