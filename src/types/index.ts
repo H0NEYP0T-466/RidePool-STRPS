@@ -248,3 +248,29 @@ export interface NewRideRequestEvent {
   dropoffLocation: LocationWithAddress;
   fare: number;
 }
+
+export interface RideAcceptedEvent {
+  rideId: string;
+  driverId: string;
+  driverName: string;
+  vehicleType: string;
+  vehicleNumber: string;
+  eta: number;
+}
+
+export interface RideStartedEvent {
+  rideId: string;
+  startTime: string;
+}
+
+export interface RideCompletedEvent {
+  rideId: string;
+  endTime: string;
+  totalFare: number;
+}
+
+export interface PoolMatchFoundEvent {
+  rideId: string;
+  matchedRideId: string;
+  discountPercentage: number;
+}

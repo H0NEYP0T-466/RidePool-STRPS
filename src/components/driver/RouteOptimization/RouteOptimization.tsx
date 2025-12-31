@@ -3,7 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import api from '../../../services/api';
 import Button from '../../common/Button/Button';
-import { formatDistance } from '../../../utils/helpers';
+import { formatDistance, calculateDistance } from '../../../utils/helpers';
 import { DEFAULT_CENTER } from '../../../utils/constants';
 import type { Ride } from '../../../types';
 import './RouteOptimization.css';
@@ -93,19 +93,6 @@ const RouteOptimization = () => {
     setTotalDistance(distance);
     setEstimatedTime(Math.round(distance / 40 * 60)); // Assuming 40 km/h average
   };
-
-  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-    const R = 6371;
-    const dLat = toRad(lat2 - lat1);
-    const dLng = toRad(lng2 - lng1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  };
-
-  const toRad = (deg: number): number => deg * (Math.PI / 180);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;

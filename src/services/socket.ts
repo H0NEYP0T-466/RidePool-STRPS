@@ -1,6 +1,14 @@
 import { io, Socket } from 'socket.io-client';
 import { SOCKET_URL } from '../utils/constants';
-import type { LocationUpdateEvent, RideStatusEvent, NewRideRequestEvent } from '../types';
+import type { 
+  LocationUpdateEvent, 
+  RideStatusEvent, 
+  NewRideRequestEvent,
+  RideAcceptedEvent,
+  RideStartedEvent,
+  RideCompletedEvent,
+  PoolMatchFoundEvent
+} from '../types';
 
 class SocketService {
   private socket: Socket | null = null;
@@ -101,7 +109,7 @@ class SocketService {
     this.socket?.off('new_ride_request');
   }
 
-  onRideAccepted(callback: (data: unknown) => void): void {
+  onRideAccepted(callback: (data: RideAcceptedEvent) => void): void {
     this.socket?.on('ride_accepted', callback);
   }
 
@@ -109,7 +117,7 @@ class SocketService {
     this.socket?.off('ride_accepted');
   }
 
-  onRideStarted(callback: (data: unknown) => void): void {
+  onRideStarted(callback: (data: RideStartedEvent) => void): void {
     this.socket?.on('ride_started', callback);
   }
 
@@ -117,7 +125,7 @@ class SocketService {
     this.socket?.off('ride_started');
   }
 
-  onRideCompleted(callback: (data: unknown) => void): void {
+  onRideCompleted(callback: (data: RideCompletedEvent) => void): void {
     this.socket?.on('ride_completed', callback);
   }
 
@@ -125,7 +133,7 @@ class SocketService {
     this.socket?.off('ride_completed');
   }
 
-  onPoolMatchFound(callback: (data: unknown) => void): void {
+  onPoolMatchFound(callback: (data: PoolMatchFoundEvent) => void): void {
     this.socket?.on('pool_match_found', callback);
   }
 
