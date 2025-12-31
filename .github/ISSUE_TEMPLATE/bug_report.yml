@@ -1,0 +1,76 @@
+name: "Bug report"
+description: "Report a reproducible problem"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "Briefly describe the issue."
+      placeholder: "A clear and concise summary."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to reproduce"
+      description: "List the steps to reproduce the problem."
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. Observe ...
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior"
+      placeholder: "What should have happened?"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Actual behavior"
+      placeholder: "What actually happened?"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment"
+      description: "OS, browser/runtime, versions."
+      placeholder: "OS, browser/runtime, app version, backend version"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs"
+      description: "Paste relevant logs or stack traces."
+      render: shell
+      placeholder: "Logs or console output"
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots"
+      description: "Add screenshots or screen recordings (optional)."
+      placeholder: "Attach via drag-and-drop or link."
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Severity"
+      options:
+        - "Critical - blocking all users"
+        - "High - major feature broken"
+        - "Medium - workaround exists"
+        - "Low - minor or cosmetic"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional context"
+      description: "Any other details or links that might help."
