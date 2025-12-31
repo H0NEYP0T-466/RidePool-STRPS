@@ -1,73 +1,164 @@
-# React + TypeScript + Vite
+# RidePool STRPS - Smart Transportation & Ride-Pooling System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack ride-pooling system with user app, driver module, and admin panel. This system allows users to request rides, pool with others on similar routes, drivers to accept and manage rides, and admins to monitor the entire system.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### User Features
+- 🚗 Request rides with pickup and dropoff locations
+- 👥 Enable pooling to share rides and save money
+- 📍 Real-time driver tracking on map
+- 📋 View ride history and past trips
+- ⭐ Rate drivers after ride completion
 
-## React Compiler
+### Driver Features
+- 📲 Receive real-time ride requests
+- ✅ Accept or reject rides
+- 🗺️ Route optimization for multiple pickups
+- 📊 View earnings and trip statistics
+- 🔄 Update ride status (in-progress, completed)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Admin Features
+- 📈 Dashboard with key metrics
+- 🚕 Monitor all trips (active, completed, cancelled)
+- 👥 User and driver management
+- 💰 Payment reports and analytics
+- ⭐ Feedback dashboard with ratings
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend
+- React 18+ with TypeScript
+- React Router for navigation
+- Pure CSS (no frameworks)
+- Leaflet for maps
+- Axios for API calls
+- Socket.IO client for real-time updates
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Backend
+- Python 3.10+
+- FastAPI framework
+- MongoDB database
+- PyMongo for database operations
+- JWT authentication
+- Socket.IO for WebSockets
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+ridepool-strps/
+├── frontend/               # React frontend (src/)
+│   ├── src/
+│   │   ├── components/    # UI components
+│   │   │   ├── common/    # Shared components
+│   │   │   ├── user/      # User module
+│   │   │   ├── driver/    # Driver module
+│   │   │   └── admin/     # Admin module
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API and socket services
+│   │   ├── context/       # React contexts
+│   │   ├── types/         # TypeScript types
+│   │   └── utils/         # Helper functions
+│   └── package.json
+├── backend/
+│   ├── app/
+│   │   ├── models/        # Pydantic models
+│   │   ├── routes/        # API routes
+│   │   ├── services/      # Business logic
+│   │   ├── utils/         # Utilities
+│   │   ├── websocket/     # Socket.IO handlers
+│   │   └── main.py        # FastAPI app
+│   ├── seed_data/         # Database seeding
+│   └── requirements.txt
+└── docs/                  # Documentation
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Quick Start
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
+- Node.js 18+
+- Python 3.10+
+- MongoDB (local or Atlas)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Frontend Setup
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
 ```
+
+### Backend Setup
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables (copy .env.example to .env)
+cp .env.example .env
+
+# Run seed data
+python seed_data/seed.py
+
+# Start server
+uvicorn app.main:socket_app --host 0.0.0.0 --port 8888 --reload
+```
+
+## Environment Variables
+
+### Frontend (.env)
+```
+VITE_API_URL=http://localhost:8888
+VITE_SOCKET_URL=http://localhost:8888
+```
+
+### Backend (.env)
+```
+MONGO_URI=mongodb://localhost:27017/strps
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRY=3600
+PORT=8888
+CORS_ORIGINS=*
+```
+
+## Test Credentials
+
+After running the seed script:
+
+| Role   | Email                  | Password    |
+|--------|------------------------|-------------|
+| User   | user1@ridepool.pk      | password123 |
+| Driver | driver1@ridepool.pk    | password123 |
+| Admin  | admin1@ridepool.pk     | password123 |
+
+## API Documentation
+
+See [API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md) for detailed API endpoints.
+
+## Database Schema
+
+See [DATABASE_SCHEMA.md](./docs/DATABASE_SCHEMA.md) for collection structures.
+
+## Cities Covered
+
+- Islamabad
+- Lahore
+- Karachi
+- Rawalpindi
+- Faisalabad
+- Multan
+- Peshawar
+- Hyderabad
+
+## License
+
+MIT License

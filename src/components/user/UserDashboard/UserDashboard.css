@@ -1,0 +1,162 @@
+.user-dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+  color: #a0a0a0;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #00d4ff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  color: #a0a0a0;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.dashboard-section {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.dashboard-section h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2d3748;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.action-card {
+  background: #16213e;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.action-card:hover {
+  border-color: #00d4ff;
+  transform: translateY(-2px);
+}
+
+.action-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.action-card h4 {
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.action-card p {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+}
+
+.recent-rides {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ride-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #16213e;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.ride-item:last-child {
+  margin-bottom: 0;
+}
+
+.ride-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ride-info {
+  flex: 1;
+}
+
+.ride-info h4 {
+  color: #fff;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.ride-info p {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+}
+
+.ride-fare {
+  color: #00d4ff;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #a0a0a0;
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}

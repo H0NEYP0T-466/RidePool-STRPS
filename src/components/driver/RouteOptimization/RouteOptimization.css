@@ -1,0 +1,142 @@
+.route-optimization {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.route-header {
+  margin-bottom: 1.5rem;
+}
+
+.route-header h1 {
+  color: #fff;
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.route-header p {
+  color: #a0a0a0;
+}
+
+.route-content {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+}
+
+.waypoints-panel {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+.waypoints-panel h2 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.waypoints-list {
+  margin-bottom: 1.5rem;
+}
+
+.waypoint-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #16213e;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.waypoint-number {
+  width: 28px;
+  height: 28px;
+  background: #00d4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.waypoint-details {
+  flex: 1;
+}
+
+.waypoint-type {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.waypoint-type.pickup {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.waypoint-type.dropoff {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.waypoint-details p {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.route-stats {
+  background: #16213e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #2d3748;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-row span {
+  color: #a0a0a0;
+}
+
+.stat-row strong {
+  color: #fff;
+}
+
+.map-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.map-container .leaflet-container {
+  height: 100%;
+  min-height: 500px;
+}
+
+.no-route {
+  text-align: center;
+  padding: 2rem;
+  color: #a0a0a0;
+}
+
+@media (max-width: 900px) {
+  .route-content {
+    grid-template-columns: 1fr;
+  }
+}
