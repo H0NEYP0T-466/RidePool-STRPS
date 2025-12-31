@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRide } from '../../../context/RideContext';
@@ -17,10 +17,12 @@ interface PoolInfo {
   pickupLocation: { lat: number; lng: number; address?: string };
   dropoffLocation: { lat: number; lng: number; address?: string };
   currentPassengers: number;
+  maxPassengers?: number;
 }
 
 const RideBooking = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const joinPoolId = searchParams.get('joinPool');
   
   const {
@@ -45,7 +47,7 @@ const RideBooking = () => {
   const [joiningPool, setJoiningPool] = useState(false);
   const [poolInfo, setPoolInfo] = useState<PoolInfo | null>(null);
 
-  // Fetch pool info if joining a pool
+  // Fetch pool info if joining a pool and automatically set locations
   useEffect(() => {
     if (joinPoolId) {
       setJoiningPool(true);
@@ -58,6 +60,19 @@ const RideBooking = () => {
           if (pool) {
             setPoolInfo(pool);
             setWantPooling(true);
+            
+            // Automatically set the same pickup and dropoff locations as the pool
+            // User joining a pool MUST have the same route
+            setPickupLocation({
+              lat: pool.pickupLocation.lat,
+              lng: pool.pickupLocation.lng,
+              address: pool.pickupLocation.address || `${pool.pickupLocation.lat.toFixed(4)}, ${pool.pickupLocation.lng.toFixed(4)}`,
+            });
+            setDropoffLocation({
+              lat: pool.dropoffLocation.lat,
+              lng: pool.dropoffLocation.lng,
+              address: pool.dropoffLocation.address || `${pool.dropoffLocation.lat.toFixed(4)}, ${pool.dropoffLocation.lng.toFixed(4)}`,
+            });
           }
         } catch (error) {
           console.error('Failed to fetch pool info:', error);
@@ -65,7 +80,7 @@ const RideBooking = () => {
       };
       fetchPoolInfo();
     }
-  }, [joinPoolId, setWantPooling]);
+  }, [joinPoolId, setWantPooling, setPickupLocation, setDropoffLocation]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -91,8 +106,11 @@ const RideBooking = () => {
         .addTo(mapRef.current!);
     });
 
-    // Click handler for selecting locations
+    // Click handler for selecting locations (disabled when joining a pool)
     mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
+      // If joining a pool, don't allow changing locations
+      if (joiningPool) return;
+      
       const location: LocationWithAddress = {
         lat: e.latlng.lat,
         lng: e.latlng.lng,
@@ -115,7 +133,7 @@ const RideBooking = () => {
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [joiningPool]);
 
   // Update markers when locations change
   useEffect(() => {
@@ -201,6 +219,8 @@ const RideBooking = () => {
           }
         });
         setSuccess('Successfully joined the pool! You will be notified when a driver accepts.');
+        // Navigate to dashboard after 2 seconds
+        setTimeout(() => navigate('/user/dashboard'), 2000);
       } else {
         await requestRide();
         setSuccess('Ride requested successfully! Looking for drivers...');
@@ -214,7 +234,7 @@ const RideBooking = () => {
     <div className="ride-booking">
       <div className="booking-header">
         <h1>{joiningPool ? 'Join a Pool' : 'Book a Ride'}</h1>
-        <p>{joiningPool ? 'Select your pickup and dropoff to join this pool' : 'Search for locations or select on the map'}</p>
+        <p>{joiningPool ? 'You are joining an existing pool with the same route' : 'Search for locations or select on the map'}</p>
       </div>
 
       {joiningPool && poolInfo && (
@@ -226,7 +246,11 @@ const RideBooking = () => {
           <p>
             <strong>To:</strong> {poolInfo.dropoffLocation.address || `${poolInfo.dropoffLocation.lat.toFixed(4)}, ${poolInfo.dropoffLocation.lng.toFixed(4)}`}
           </p>
-          <p><strong>Current passengers:</strong> {poolInfo.currentPassengers}/4</p>
+          <p><strong>Current passengers:</strong> {poolInfo.currentPassengers}/{poolInfo.maxPassengers || 4}</p>
+          <p className="pool-notice">
+            <span className="notice-icon">ℹ️</span>
+            You will share the same route as this pool. Locations cannot be changed.
+          </p>
         </div>
       )}
 
@@ -235,54 +259,88 @@ const RideBooking = () => {
           <h2>Trip Details</h2>
 
           <div className="location-inputs">
-            <LocationSearch
-              label="Pickup Location"
-              placeholder="Search pickup location..."
-              value={pickupLocation}
-              onChange={(location) => {
-                setPickupLocation(location);
-                if (location) {
-                  findNearbyDrivers(location.lat, location.lng);
-                  setSelectingLocation('dropoff');
-                } else {
-                  setSelectingLocation('pickup');
-                }
-              }}
-              isActive={selectingLocation === 'pickup'}
-              onFocus={() => setSelectingLocation('pickup')}
-            />
+            {joiningPool ? (
+              // When joining a pool, show read-only locations
+              <>
+                <div className="location-display">
+                  <label>Pickup Location</label>
+                  <div className="location-value">
+                    <span className="location-dot pickup"></span>
+                    {pickupLocation?.address || 'Loading...'}
+                  </div>
+                </div>
+                <div className="location-display">
+                  <label>Dropoff Location</label>
+                  <div className="location-value">
+                    <span className="location-dot dropoff"></span>
+                    {dropoffLocation?.address || 'Loading...'}
+                  </div>
+                </div>
+                <p className="map-hint">
+                  🔒 Locations are locked when joining an existing pool
+                </p>
+              </>
+            ) : (
+              // Normal booking - allow location selection
+              <>
+                <LocationSearch
+                  label="Pickup Location"
+                  placeholder="Search pickup location..."
+                  value={pickupLocation}
+                  onChange={(location) => {
+                    setPickupLocation(location);
+                    if (location) {
+                      findNearbyDrivers(location.lat, location.lng);
+                      setSelectingLocation('dropoff');
+                    } else {
+                      setSelectingLocation('pickup');
+                    }
+                  }}
+                  isActive={selectingLocation === 'pickup'}
+                  onFocus={() => setSelectingLocation('pickup')}
+                />
 
-            <LocationSearch
-              label="Dropoff Location"
-              placeholder="Search dropoff location..."
-              value={dropoffLocation}
-              onChange={(location) => {
-                setDropoffLocation(location);
-                if (location) {
-                  setSelectingLocation(null);
-                } else {
-                  setSelectingLocation('dropoff');
-                }
-              }}
-              isActive={selectingLocation === 'dropoff'}
-              onFocus={() => setSelectingLocation('dropoff')}
-            />
-            
-            <p className="map-hint">
-              💡 Tip: You can also click on the map to select locations
-            </p>
+                <LocationSearch
+                  label="Dropoff Location"
+                  placeholder="Search dropoff location..."
+                  value={dropoffLocation}
+                  onChange={(location) => {
+                    setDropoffLocation(location);
+                    if (location) {
+                      setSelectingLocation(null);
+                    } else {
+                      setSelectingLocation('dropoff');
+                    }
+                  }}
+                  isActive={selectingLocation === 'dropoff'}
+                  onFocus={() => setSelectingLocation('dropoff')}
+                />
+                
+                <p className="map-hint">
+                  💡 Tip: You can also click on the map to select locations
+                </p>
+              </>
+            )}
           </div>
 
-          <div className="pooling-toggle">
-            <div className="pooling-info">
-              <h4>Enable Pooling</h4>
-              <p>Save up to 25% by sharing your ride</p>
+          {!joiningPool && (
+            <div className="pooling-toggle">
+              <div className="pooling-info">
+                <h4>Enable Pooling</h4>
+                <p>Save up to 25% by sharing your ride</p>
+              </div>
+              <div
+                className={`toggle-switch ${wantPooling ? 'active' : ''}`}
+                onClick={() => setWantPooling(!wantPooling)}
+              />
             </div>
-            <div
-              className={`toggle-switch ${wantPooling ? 'active' : ''}`}
-              onClick={() => setWantPooling(!wantPooling)}
-            />
-          </div>
+          )}
+
+          {joiningPool && (
+            <div className="pooling-badge-container">
+              <span className="pooling-badge active">👥 Pooling Enabled (Required for joining)</span>
+            </div>
+          )}
 
           {fareInfo && (
             <div className="fare-estimate">
