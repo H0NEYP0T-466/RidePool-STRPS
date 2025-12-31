@@ -49,7 +49,8 @@ const dummyLogin = (credentials: UserLogin): User | null => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUserState] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isBackendAvailable, setIsBackendAvailable] = useState(true);
+  // Start as false - assume backend unavailable until proven otherwise
+  const [isBackendAvailable, setIsBackendAvailable] = useState(false);
 
   const checkBackend = useCallback(async () => {
     const available = await checkBackendAvailable();
@@ -93,59 +94,62 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [checkBackend]);
 
   const login = async (credentials: UserLogin) => {
-    // First check if backend is available
-    const backendAvailable = await checkBackend();
-    
-    if (backendAvailable) {
-      try {
-        const response = await authService.login(credentials);
-        setToken(response.token);
-        setUser(response.user);
-        setUserState(response.user);
-        socketService.connect();
-        socketService.joinRoom(response.user.id, response.user.role as 'user' | 'driver');
+    // Use cached backend status first to avoid waiting
+    // If already known to be unavailable, go straight to dummy login
+    if (!isBackendAvailable) {
+      // Backend known to be unavailable, use dummy login directly
+      const dummyUser = dummyLogin(credentials);
+      if (dummyUser) {
+        setToken('dummy-token-' + Date.now());
+        setUser(dummyUser);
+        setUserState(dummyUser);
         return;
-      } catch (error) {
-        // If backend fails, fall through to dummy login
-        const available = await checkBackend();
-        if (available) {
-          // Backend is available but login failed - throw the error
-          throw error;
-        }
+      } else {
+        throw new Error('Invalid credentials. Try: user1@ridepool.pk, driver1@ridepool.pk, or admin1@ridepool.pk with password: password123');
       }
     }
     
-    // Backend not available, use dummy login
-    const dummyUser = dummyLogin(credentials);
-    if (dummyUser) {
-      setToken('dummy-token-' + Date.now());
-      setUser(dummyUser);
-      setUserState(dummyUser);
-    } else {
-      throw new Error('Invalid credentials. Try: user1@ridepool.pk, driver1@ridepool.pk, or admin1@ridepool.pk with password: password123');
+    // Try backend login
+    try {
+      const response = await authService.login(credentials);
+      setToken(response.token);
+      setUser(response.user);
+      setUserState(response.user);
+      socketService.connect();
+      socketService.joinRoom(response.user.id, response.user.role as 'user' | 'driver');
+      return;
+    } catch (error) {
+      // If backend fails due to network error, try dummy login
+      setIsBackendAvailable(false);
+      const dummyUser = dummyLogin(credentials);
+      if (dummyUser) {
+        setToken('dummy-token-' + Date.now());
+        setUser(dummyUser);
+        setUserState(dummyUser);
+        return;
+      }
+      // Neither backend nor dummy login worked
+      throw error;
     }
   };
 
   const register = async (userData: UserCreate) => {
-    const backendAvailable = await checkBackend();
-    
-    if (backendAvailable) {
-      try {
-        const response = await authService.register(userData);
-        setToken(response.token);
-        setUser(response.user);
-        setUserState(response.user);
-        socketService.connect();
-        socketService.joinRoom(response.user.id, response.user.role as 'user' | 'driver');
-        return;
-      } catch (error) {
-        const available = await checkBackend();
-        if (available) throw error;
-      }
+    // If backend is known to be unavailable, show error immediately
+    if (!isBackendAvailable) {
+      throw new Error('Registration not available in demo mode. Please use test credentials: user1@ridepool.pk / password123');
     }
     
-    // Backend not available, can't register in demo mode
-    throw new Error('Registration not available in demo mode. Please use test credentials: user1@ridepool.pk / password123');
+    try {
+      const response = await authService.register(userData);
+      setToken(response.token);
+      setUser(response.user);
+      setUserState(response.user);
+      socketService.connect();
+      socketService.joinRoom(response.user.id, response.user.role as 'user' | 'driver');
+    } catch (error) {
+      setIsBackendAvailable(false);
+      throw new Error('Registration not available in demo mode. Please use test credentials: user1@ridepool.pk / password123');
+    }
   };
 
   const logout = async () => {
