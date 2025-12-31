@@ -44,9 +44,14 @@ app.include_router(ride.router)
 app.include_router(admin.router)
 
 
-# Health check endpoint
+# Health check endpoints
 @app.get("/health")
 async def health_check():
+    return {"status": "healthy", "message": "RidePool STRPS API is running"}
+
+
+@app.get("/api/health")
+async def api_health_check():
     return {"status": "healthy", "message": "RidePool STRPS API is running"}
 
 
