@@ -264,3 +264,10 @@
     min-height: 400px;
   }
 }
+
+.map-hint {
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
