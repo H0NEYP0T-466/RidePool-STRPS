@@ -29,7 +29,7 @@ Community leaders have the right and responsibility to remove, edit, or reject c
 This Code of Conduct applies within all community spaces and also applies when an individual is officially representing the community in public spaces.
 
 ## Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at **conduct@ridepool.example**. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at **H0NEYP0T-466@users.noreply.github.com** or via a private advisory: https://github.com/H0NEYP0T-466/RidePool-STRPS/security/advisories/new. All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

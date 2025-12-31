@@ -1,7 +1,8 @@
 # Security Policy
 
 ## 🔐 Reporting a Vulnerability
-- Please email **security@ridepool.example** with the details, proof of concept, and affected versions.
+- Open a private GitHub Security Advisory: https://github.com/H0NEYP0T-466/RidePool-STRPS/security/advisories/new
+- Alternatively, email **H0NEYP0T-466@users.noreply.github.com** with details, proof of concept, and affected versions.
 - Do **not** open public GitHub issues for sensitive reports.
 - You will receive an acknowledgement within 3 business days.
 
