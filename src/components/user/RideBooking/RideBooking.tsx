@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRide } from '../../../context/RideContext';
 import Button from '../../common/Button/Button';
+import LocationSearch from '../../common/LocationSearch/LocationSearch';
 import { formatCurrency } from '../../../utils/helpers';
 import { DEFAULT_CENTER, PAKISTAN_CITIES } from '../../../utils/constants';
 import type { LocationWithAddress, NearbyDriver } from '../../../types';
@@ -161,7 +162,7 @@ const RideBooking = () => {
     <div className="ride-booking">
       <div className="booking-header">
         <h1>Book a Ride</h1>
-        <p>Select your pickup and dropoff locations on the map</p>
+        <p>Search for locations or select on the map</p>
       </div>
 
       <div className="booking-content">
@@ -169,31 +170,42 @@ const RideBooking = () => {
           <h2>Trip Details</h2>
 
           <div className="location-inputs">
-            <div
-              className={`location-input ${selectingLocation === 'pickup' ? 'active' : ''}`}
-              onClick={() => setSelectingLocation('pickup')}
-            >
-              <div className="location-marker pickup" />
-              <div className="location-details">
-                <span className="location-label">Pickup Location</span>
-                <span className="location-address">
-                  {pickupLocation?.address || 'Click to select on map'}
-                </span>
-              </div>
-            </div>
+            <LocationSearch
+              label="Pickup Location"
+              placeholder="Search pickup location..."
+              value={pickupLocation}
+              onChange={(location) => {
+                setPickupLocation(location);
+                if (location) {
+                  findNearbyDrivers(location.lat, location.lng);
+                  setSelectingLocation('dropoff');
+                } else {
+                  setSelectingLocation('pickup');
+                }
+              }}
+              isActive={selectingLocation === 'pickup'}
+              onFocus={() => setSelectingLocation('pickup')}
+            />
 
-            <div
-              className={`location-input ${selectingLocation === 'dropoff' ? 'active' : ''}`}
-              onClick={() => setSelectingLocation('dropoff')}
-            >
-              <div className="location-marker dropoff" />
-              <div className="location-details">
-                <span className="location-label">Dropoff Location</span>
-                <span className="location-address">
-                  {dropoffLocation?.address || 'Click to select on map'}
-                </span>
-              </div>
-            </div>
+            <LocationSearch
+              label="Dropoff Location"
+              placeholder="Search dropoff location..."
+              value={dropoffLocation}
+              onChange={(location) => {
+                setDropoffLocation(location);
+                if (location) {
+                  setSelectingLocation(null);
+                } else {
+                  setSelectingLocation('dropoff');
+                }
+              }}
+              isActive={selectingLocation === 'dropoff'}
+              onFocus={() => setSelectingLocation('dropoff')}
+            />
+            
+            <p className="map-hint">
+              💡 Tip: You can also click on the map to select locations
+            </p>
           </div>
 
           <div className="pooling-toggle">

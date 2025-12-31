@@ -60,7 +60,11 @@ async def root():
 
 
 # Create ASGI app with Socket.IO
-socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
+socket_app = socketio.ASGIApp(
+    sio, 
+    other_asgi_app=app,
+    socketio_path='socket.io'
+)
 
 
 if __name__ == "__main__":
