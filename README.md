@@ -68,7 +68,7 @@ Built with modern web technologies including **React**, **TypeScript**, **FastAP
 - [✨ Key Highlights](#-key-highlights)
 - [🏗 Architecture](#-architecture)
 - [🚀 Quick Start](#-quick-start)
-- [⚙️ Environment Configuration](#️-environment-configuration)
+- [⚙️ Environment Configuration](#-environment-configuration)
 - [⚡ Usage](#-usage)
 - [📡 API Documentation](#-api-documentation)
 - [✨ Features](#-features)
@@ -548,7 +548,6 @@ For complete API documentation with interactive examples, visit: **`http://local
 
 ---
 
-## 🚀 Installation
 ## ✨ Features
 
 ### 🚗 For Riders
@@ -1047,7 +1046,6 @@ pytest
 - 📖 Check the [Documentation](./docs)
 - 🐛 [Open an Issue](https://github.com/H0NEYP0T-466/RidePool-STRPS/issues)
 - 💬 [Start a Discussion](https://github.com/H0NEYP0T-466/RidePool-STRPS/discussions)
-- 📧 Contact: [Your Email/Support Contact]
 
 ---
 
