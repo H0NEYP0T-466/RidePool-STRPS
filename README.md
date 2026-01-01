@@ -23,8 +23,7 @@
   ![Languages Count](https://img.shields.io/github/languages/count/H0NEYP0T-466/RidePool-STRPS?style=for-the-badge&color=success)  
 
   <!-- Optional CI/Security -->
-  ![Build Status](https://img.shields.io/badge/CI-Not%20Configured-lightgrey?style=for-the-badge&logo=github)  
-  ![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/H0NEYP0T-466/RidePool-STRPS?style=for-the-badge&color=red)  
+
 
   <!-- Community -->
   ![Discussions](https://img.shields.io/github/discussions/H0NEYP0T-466/RidePool-STRPS?style=for-the-badge&color=blue)  
@@ -899,36 +898,7 @@ pytest
 
 ---
 
-## 📸 Screenshots
 
-> **Note:** Add screenshots to enhance documentation. Suggested sections:
-
-### Landing Page
-<!-- ![Landing Page](./docs/screenshots/landing-page.png) -->
-*Homepage showcasing the platform's value proposition*
-
-### Rider Dashboard
-<!-- ![Rider Dashboard](./docs/screenshots/rider-dashboard.png) -->
-*User interface for booking rides and tracking live location*
-
-### Driver Interface
-<!-- ![Driver Interface](./docs/screenshots/driver-interface.png) -->
-*Driver dashboard with available ride requests and active trips*
-
-### Admin Panel
-<!-- ![Admin Panel](./docs/screenshots/admin-panel.png) -->
-*Administrative dashboard with analytics and management tools*
-
-### Live Tracking
-<!-- ![Live Tracking](./docs/screenshots/live-tracking.png) -->
-*Real-time driver location on interactive map*
-
-**To add screenshots:**
-1. Create `docs/screenshots/` directory
-2. Add screenshot images
-3. Uncomment the image markdown above and update paths
-
----
 
 ## 🛠 Troubleshooting
 
